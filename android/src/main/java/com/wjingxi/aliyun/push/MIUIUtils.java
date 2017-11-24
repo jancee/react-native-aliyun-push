@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2017-present, Wonday (@wonday.org)
+ * Copyright (c) 2017-present, Jingxi Wang (@wjingxi.com)
  * All rights reserved.
  *
  * This source code is licensed under the MIT-style license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
-package org.wonday.aliyun.push;
+package com.wjingxi.aliyun.push;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

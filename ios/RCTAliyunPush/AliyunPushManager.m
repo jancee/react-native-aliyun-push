@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-present, Wonday (@wonday.org)
+ * Copyright (c) 2017-present, Jingxi Wang (@wjingxi.com)
  * All rights reserved.
  *
  * This source code is licensed under the MIT-style license found in the
@@ -39,7 +39,7 @@ NSString *const ALIYUN_PUSH_TYPE_NOTIFICATION = @"notification";
 
 @implementation AliyunPushManager
 {
-
+    
 }
 
 
@@ -122,8 +122,8 @@ RCT_EXPORT_METHOD(getDeviceId:(RCTResponseSenderBlock)callback)
  * bind account to cloud sdk
  */
 RCT_EXPORT_METHOD(bindAccount:(NSString *)account
-                    resolver:(RCTPromiseResolveBlock)resolve
-                    rejecter:(RCTPromiseRejectBlock)reject)
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     [CloudPushSDK bindAccount:account withCallback:^(CloudPushCallbackResult *res) {
         if (res.success) {
@@ -139,7 +139,7 @@ RCT_EXPORT_METHOD(bindAccount:(NSString *)account
  */
 
 RCT_EXPORT_METHOD(unbindAccount:(RCTPromiseResolveBlock)resolve
-                       rejecter:(RCTPromiseRejectBlock)reject)
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     [CloudPushSDK unbindAccount:^(CloudPushCallbackResult *res) {
         if (res.success) {
@@ -207,7 +207,7 @@ RCT_EXPORT_METHOD(listTags:(int)target
                   } else {
                       reject([NSString stringWithFormat:@"%ld",(long)res.error.code], res.error.localizedDescription,res.error);
                   }
-             }];
+              }];
 }
 
 /**
@@ -248,7 +248,7 @@ RCT_EXPORT_METHOD(removeAlias:(NSString *)alias
  */
 
 RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
-                     rejecter:(RCTPromiseRejectBlock)reject)
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     [CloudPushSDK listAliases:^(CloudPushCallbackResult *res) {
         if (res.success) {
@@ -339,7 +339,7 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
         if (createNotificationCategoryHandler) {
             createNotificationCategoryHandler();
         }
-
+        
         
         _notificationCenter.delegate = sharedInstance;
         // 请求推送权限
@@ -382,7 +382,7 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
 {
     
     // 正式上线建议关闭
-    //[CloudPushSDK turnOnDebug];
+    [CloudPushSDK turnOnDebug];
     
     // SDK初始化
     [CloudPushSDK asyncInit:appKey appSecret:appSecret callback:^(CloudPushCallbackResult *res) {
@@ -451,7 +451,7 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
     [self sendEventToJs:notificationDict];
     
     // 通知打开回执上报
-    [CloudPushSDK sendNotificationAck:userInfo];    
+    [CloudPushSDK sendNotificationAck:userInfo];
     
     if ([content.body isEqualToString:@""]){
         
@@ -459,7 +459,7 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
         completionHandler(UNNotificationPresentationOptionNone);
         
     } else {
-    
+        
         // 通知弹出，且带有声音、内容和角标
         completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
         
@@ -513,7 +513,7 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
         
         
     } else {
-
+        
         // 用户自定义action
         notificationDict[@"actionIdentifier"] =response.actionIdentifier;
         
@@ -569,7 +569,7 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
     // 通知打开回执上报
     [CloudPushSDK sendNotificationAck:userInfo];
     
-
+    
     completionHandler(UIBackgroundFetchResultNewData);
 }
 
@@ -611,35 +611,37 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
 }
 
 /**
- *	处理到来推送消息
+ *	处理到来推送消息 message
  *
  *	@param 	notification
  */
 - (void)onMessageReceived:(NSNotification *)notification
 {
-    DLog(@"onMessageReceived.");
+    DLog(@"onMessageReceived.->%@", notification);
     
-    NSMutableDictionary *notificationDict = [notification object];
+    if(!notification) {
+        return;
+    }
     
-    // 取得通知自定义字段内容
-    notificationDict[@"extras"] = [notification userInfo];
+    CCPSysMessage *object = [notification object];
     
-    // 类型 “notification” or "message"
+    NSMutableDictionary *notificationDict = [[NSMutableDictionary alloc] init];
     notificationDict[@"type"] = ALIYUN_PUSH_TYPE_MESSAGE;
+    notificationDict[@"title"] = object.title;
+    notificationDict[@"body"] = object.body;
     
     [self sendEventToJs:notificationDict];
-    
 }
 
-- (void)sendEventToJs:(NSMutableDictionary*)notification
+- (void)sendEventToJs:(NSMutableDictionary*)notificationDict
 {
     DLog(@"sendEventToJs:");
     
-    for (NSString *key in notification) {
-        DLog(@"key: %@ value: %@", key, notification[key]);
+    for (NSString *key in notificationDict) {
+        DLog(@"key: %@ value: %@", key, notificationDict[key]);
     }
     
-    [self sendEventWithName:@"aliyunPushReceived" body:notification];
+    [self sendEventWithName:@"aliyunPushReceived" body:notificationDict];
 }
 
 @end

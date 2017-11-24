@@ -1,44 +1,24 @@
-# react-native-aliyun-push
-[![npm](https://img.shields.io/npm/v/react-native-aliyun-push.svg?style=flat-square)](https://www.npmjs.com/package/react-native-aliyun-push)
+# wjx-react-native-aliyun-push
+
+[![npm](https://img.shields.io/npm/v/wjx-react-native-aliyun-push.svg?style=flat-square)](https://www.npmjs.com/package/wjx-react-native-aliyun-push)
 
 [阿里云移动推送](https://www.aliyun.com/product/cps?spm=5176.2020520107.0.0.fgXGFp)react-native封装组件
 
+### 变更
 
-### 修改履历
+v2.0.0
+修复IOS端，接收到推送消息时报异常的问题。
 
 v1.0.5
-
-1. .npmignore中添加.git
-
-v1.0.4
-
-1. 删除对PropTypes的import #8
-
-v1.0.3
-
-1. 修正iOS上xcode9编译警告 #6 
-2. iOS版本工程文件升级为xcode9格式
-
-v1.0.2
-
-1. 修正iOS上actionIdentifier错误,"open"->"opened" #5 
-
-v1.0.1
-
-1. 设置badgeNumber时，增加对badgeNumber判断，避免小米上显示0条消息未读
-
-v1.0.0
-
-1. 初始发布
-
+该项目fork自react-native-aliyun-push，并在其基础上，做修改和优化。
 
 ## 前提
 使用本组件前提是注册过阿里云移动推送服务，注册过app并取得了appKey及appSecret, 如果要使用ios版还要向苹果公司申请证书并配置好阿里云上的设置。
 这里不详细描述，请参考[阿里云移动推送文档](https://help.aliyun.com/document_detail/30054.html)
 ## 安装
 ```
-npm install react-native-aliyun-push --save
-react-native link react-native-aliyun-push
+npm install wjx-react-native-aliyun-push --save
+react-native link wjx-react-native-aliyun-push
 ```
 ## android配置
 1. 在Project根目录下build.gradle文件中配置maven库URL:
@@ -56,29 +36,35 @@ allprojects {
             url "http://maven.aliyun.com/nexus/content/repositories/releases/"
         }
         flatDir {
-            dirs project(':react-native-aliyun-push').file('libs')
+            dirs project(':wjx-react-native-aliyun-push').file('libs')
         }
         // 添加结束
     }
 }
 ```
+
 2. 确保settings.gradle中被添加如下代码：
+
 ```
-include ':react-native-aliyun-push'
-project(':react-native-aliyun-push').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-aliyun-push/android')
+include ':wjx-react-native-aliyun-push'
+project(':wjx-react-native-aliyun-push').projectDir = new File(rootProject.projectDir, '../node_modules/wjx-react-native-aliyun-push/android')
 ```
+
 3. 确保app/build.gradle中被添加如下代码：
+
 ```
 dependencies {
     //下面是被添加的代码
-    compile project(':react-native-aliyun-push')
+    compile project(':wjx-react-native-aliyun-push')
     //添加结束
 }
 ```
+
 4. 确保MainApplication.java中被添加如下代码
+
 ```
 // 下面是被添加的代码
-import org.wonday.aliyun.push.AliyunPushPackage;
+import com.wjingxi.aliyun.push.AliyunPushPackage;
 
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
@@ -102,7 +88,7 @@ import com.alibaba.sdk.android.push.register.MiPushRegister;
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
-    
+
     //下面是添加的代码
     this.initCloudChannel();
     //添加结束
@@ -135,17 +121,17 @@ import com.alibaba.sdk.android.push.register.MiPushRegister;
   }
   // 添加结束
 
-  
+
 ```
 
 ## ios配置
 
-1. 添加node_modules/react-native-aliyun-push/ios/RCTAliyunPush.xcodeproj到xcode项目工程
+1. 添加node_modules/wjx-react-native-aliyun-push/ios/RCTAliyunPush.xcodeproj到xcode项目工程
 
 2. 添加阿里云移动推送SDK
 
-拖拽node_modules/react-native-aliyun-push/ios/libs下列目录到xcode工程的```frameworks```目录下，将```copy items if needed```打勾。
-注意：从阿里云下载的SDK中UTDID.framework有问题，编译会报错，请使用react-native-aliyun-push中内置的版本。
+拖拽node_modules/wjx-react-native-aliyun-push/ios/libs下列目录到xcode工程的```frameworks```目录下，将```copy items if needed```打勾。
+注意：从阿里云下载的SDK中UTDID.framework有问题，编译会报错，请使用wjx-react-native-aliyun-push中内置的版本。
 
 - AlicloudUtils.framework
 - CloudPushSDK.framework
@@ -161,6 +147,7 @@ import com.alibaba.sdk.android.push.register.MiPushRegister;
 - UserNotifications.framework
 
 4. 修改AppDelegate.m添加如下代码
+
 ```
 #import "AliyunPushManager.h"
 ```
@@ -220,7 +207,7 @@ import com.alibaba.sdk.android.push.register.MiPushRegister;
 
 引入模块
 ```
-import AliyunPush from 'react-native-aliyun-push';
+import AliyunPush from 'wjx-react-native-aliyun-push';
 ```
 
 监听推送事件

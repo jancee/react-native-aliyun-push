@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-present, Wonday (@wonday.org)
+ * Copyright (c) 2017-present, Jingxi Wang (@wjingxi.com)
  * All rights reserved.
  *
  * This source code is licensed under the MIT-style license found in the

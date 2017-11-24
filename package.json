@@ -1,11 +1,11 @@
 {
-    "name": "react-native-aliyun-push",
-    "version": "1.0.5",
+    "name": "wjx-react-native-aliyun-push",
+    "version": "2.0.6",
     "description": "A react native wrapper for aliyun push SDK",
     "main": "index.js",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/wonday/react-native-aliyun-push.git"
+        "url": "git+https://github.com/jancee/wjx-react-native-aliyun-push.git"
     },
     "keywords": [
         "react-component",
@@ -19,12 +19,12 @@
         "ali-push"
     ],
     "author": {
-        "name": "Wonday",
-        "url": "https://github.com/wonday"
+        "name": "Jingxi Wang",
+        "url": "https://github.com/jancee"
     },
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/wonday/react-native-aliyun-push/issues"
+        "url": "https://github.com/jancee/wjx-react-native-aliyun-push/issues"
     },
     "dependencies": {
     },
