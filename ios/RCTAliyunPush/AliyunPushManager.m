@@ -423,7 +423,7 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
     UNNotificationContent *content = request.content;
     NSDictionary *userInfo = content.userInfo;
     
-    NSMutableDictionary *notificationDict = [NSMutableDictionary dictionaryWithCapacity:5];
+    NSMutableDictionary *notificationDict = [NSMutableDictionary dictionary];
     
     // 通知时间
     notificationDict[@"date"] = notification.date;
@@ -477,7 +477,7 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
     UNNotificationContent *content = request.content;
     NSDictionary *userInfo = content.userInfo;
     
-    NSMutableDictionary *notificationDict = [NSMutableDictionary dictionaryWithCapacity:5];
+    NSMutableDictionary *notificationDict = [NSMutableDictionary dictionary];
     
     // 通知时间
     notificationDict[@"date"] = response.notification.date;
@@ -617,20 +617,27 @@ RCT_EXPORT_METHOD(listAliases:(RCTPromiseResolveBlock)resolve
  */
 - (void)onMessageReceived:(NSNotification *)notification
 {
-    DLog(@"onMessageReceived.->%@", notification);
+    DLog(@"onMessageReceived.");
     
-    if(!notification) {
-        return;
+    NSMutableDictionary *notificationDict = [NSMutableDictionary dictionary];
+    
+    CCPSysMessage *message = [notification object];
+    
+    notificationDict[@"title"] = [[NSString alloc] initWithData:message.title encoding:NSUTF8StringEncoding];
+    notificationDict[@"body"] = [[NSString alloc] initWithData:message.body encoding:NSUTF8StringEncoding];
+    // 取得通知自定义字段内容
+    if (notification.userInfo) {
+        notificationDict[@"extras"] = notification.userInfo;
+    } else {
+        notificationDict[@"extras"] = @{};
     }
     
-    CCPSysMessage *object = [notification object];
     
-    NSMutableDictionary *notificationDict = [[NSMutableDictionary alloc] init];
+    // 类型 “notification” or "message"
     notificationDict[@"type"] = ALIYUN_PUSH_TYPE_MESSAGE;
-    notificationDict[@"title"] = object.title;
-    notificationDict[@"body"] = object.body;
     
     [self sendEventToJs:notificationDict];
+    
 }
 
 - (void)sendEventToJs:(NSMutableDictionary*)notificationDict

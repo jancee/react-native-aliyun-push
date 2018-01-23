@@ -1,6 +1,6 @@
 {
     "name": "wjx-react-native-aliyun-push",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "description": "A react native wrapper for aliyun push SDK",
     "main": "index.js",
     "repository": {
